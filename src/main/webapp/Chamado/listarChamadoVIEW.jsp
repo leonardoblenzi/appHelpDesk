@@ -1,8 +1,22 @@
+<%@page import="br.com.DTO.UsuarioDTO"%>
 <%@page import="br.com.DTO.ChamadoDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="br.com.DAO.ChamadoDAO"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%
+	//verificando se usuario esta logado
+	session = request.getSession(false); //Obtém a sessão atual, mas não cria uma nova se ela não existir
+	if(session == null || session.getAttribute("usuarioLogado") == null) {
+		response.sendRedirect("../index.jsp?denied");
+	} 
+	//verificando se usuario é administrador para acessar pagina restrita
+	UsuarioDTO usuarioLogado = (UsuarioDTO) session.getAttribute("usuarioLogado");
+	String funcao = usuarioLogado.getFuncao();
+	if(!funcao.equals("Administrador")){
+		response.sendRedirect("../home.jsp?denied");
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,13 +26,6 @@
     
     <link rel="stylesheet" type="text/css" href="../style/estilo.css">
 
-    <style>
-      .card-consultar-chamado {
-        padding: 30px 0 0 0;
-        width: 100%;
-        margin: 0 auto;
-      }
-    </style>
 </head>
 <body>
 	
@@ -57,9 +64,14 @@
 					chamadosHTML.append("<div class='card-body'>");
 			     	chamadosHTML.append("<div class='card mb-3 bg-light'>");
 			        chamadosHTML.append("<div class='card-body'>");
-			        chamadosHTML.append("<h5 class='card-title'>" + lista.get(posicao).getTitulo() + "</h5>");
-			        chamadosHTML.append("<h6 class='card-subtitle mb-2 text-muted'>" + lista.get(posicao).getCategoria() + "</h6>");
-			        chamadosHTML.append("<p class='card-text'>" + lista.get(posicao).getDescricao() + "</p>");
+			        chamadosHTML.append("<label class=font-weight-bold>Titulo</label>");
+			        chamadosHTML.append("<p>" + lista.get(posicao).getTitulo() + "</p>");
+			        chamadosHTML.append("<label class=font-weight-bold>Categoria</label>");
+			        chamadosHTML.append("<p>" + lista.get(posicao).getCategoria() + "</p>");
+			        chamadosHTML.append("<label class=font-weight-bold>Descricao</label>");
+			        chamadosHTML.append("<p>" + lista.get(posicao).getDescricao() + "</p>");
+			        chamadosHTML.append("<label class=font-weight-bold>ID Usuario</label>");
+			        chamadosHTML.append("<p>" + lista.get(posicao).getId_usuario() + "</p>");
 			        chamadosHTML.append("</div>");
 			        chamadosHTML.append("</div>");
 			        chamadosHTML.append("</div>");
@@ -85,7 +97,7 @@
 
 	              <div class="row mt-5">
 	                <div class="col-6">
-	                <a href="../index.html">
+	                <a href="../home.jsp">
 	                	<button class="btn btn-lg btn-warning btn-block" type="submit">Voltar</button>
 	                </a>
 	                </div>

@@ -25,8 +25,8 @@
 				//chamando metodo de excluir chamado por id e passando o objeto DTO como parametro
 				objChamadoDAO.excluirChamado(objChamadoDTO);
 				
-				
-				response.sendRedirect("listarChamado.jsp");
+				out.print(objChamadoDTO.getId_chamado());
+				response.sendRedirect("listarChamadoVIEW.jsp");
 
 			}
 			catch(Exception e){

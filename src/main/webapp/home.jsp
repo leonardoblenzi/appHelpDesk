@@ -1,6 +1,12 @@
+<%
+	session = request.getSession(false); //Obtém a sessão atual, mas não cria uma nova se ela não existir
+	if(session == null || session.getAttribute("usuarioLogado") == null) {
+		response.sendRedirect("index.jsp?denied");
+	} 
+		
+%>
 
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta charset="utf-8" />
@@ -10,14 +16,6 @@
 
     <link rel="stylesheet" type="text/css" href="style/estilo.css">
 
-
-    <style>
-      .card-home {
-        padding: 30px 0 0 0;
-        width: 100%;
-        margin: 0 auto;
-      }
-    </style>
   </head>
 
   <body>
@@ -56,7 +54,7 @@
                   <img src="style/imagens/formulario_consultar_chamado.png" width="70" height="70">
                   <div class="align-self-center">
 
-                    <a href="Chamado/listarChamado.jsp">
+                    <a href="Chamado/listarChamadoVIEW.jsp">
                       <h5 class="lead">Consultar chamados</h5>
                     </a>
 

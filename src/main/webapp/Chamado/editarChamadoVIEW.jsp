@@ -1,8 +1,19 @@
-
-<!DOCTYPE html>
-
+<%@page import="br.com.DTO.UsuarioDTO"%>
 <%@page import="br.com.DAO.ChamadoDAO"%>
 <%@page import="br.com.DTO.ChamadoDTO"%>
+<%
+	session = request.getSession(false); //Obtém a sessão atual, mas não cria uma nova se ela não existir
+	if(session == null || session.getAttribute("usuarioLogado") == null) {
+		response.sendRedirect("index.jsp?denied");
+	} 
+	//verificando se usuario é administrador para acessar pagina restrita
+		UsuarioDTO usuarioLogado = (UsuarioDTO) session.getAttribute("usuarioLogado");
+		if(usuarioLogado.getFuncao() != "Administrador"){
+			response.sendRedirect("../home.jsp?denied");
+		}
+		
+%>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -12,13 +23,6 @@
 
     <link rel="stylesheet" type="text/css" href="../style/estilo.css">
 
-    <style>
-      .card-abrir-chamado {
-        padding: 30px 0 0 0;
-        width: 100%;
-        margin: 0 auto;
-      }
-    </style>
   </head>
 
   <body>
@@ -95,7 +99,7 @@
 					<!-- botao para voltar -->
                     <div class="row mt-5">
                       <div class="col-6">
-	                      <a href="listaChamado.jsp">
+	                      <a href="listarChamadoVIEW.jsp">
 	                      	<button class="btn btn-lg btn-warning btn-block" type="button">Voltar</button>
 	                      </a>
                         

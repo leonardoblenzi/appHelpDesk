@@ -24,7 +24,7 @@ public class ChamadoDAO {
 	//recebe o chamadoDTO para acessar os atributos do objeto
 	public void CriarChamado(ChamadoDTO objChamadoDTO) throws ClassNotFoundException {
 		//comando sql
-		String sql = "INSERT INTO chamado(titulo_chamado, categoria_chamado, descricao) VALUES(?,?,?)";
+		String sql = "INSERT INTO chamado(titulo_chamado, categoria_chamado, descricao, id_usuario) VALUES(?,?,?,?)";
 		//faz a conexao
 		con = new ConexaoDAO().conexaoBD();
 		
@@ -35,7 +35,8 @@ public class ChamadoDAO {
 			pstm.setString(1, objChamadoDTO.getTitulo());
 			pstm.setString(2, objChamadoDTO.getCategoria());
 			pstm.setString(3, objChamadoDTO.getDescricao());
-
+			pstm.setInt(4, objChamadoDTO.getId_usuario());
+			
 			//executa o comando sql com o pstm
 			pstm.execute();
 			//fecha o pstm
@@ -57,6 +58,7 @@ public class ChamadoDAO {
 			//armazendo resultado da consulta sql na variavel do tipo ResultSet
 			rs = pstm.executeQuery(sql);
 			
+			
 			//enquanto rs tiver proximo valor(linha)
 			while(rs.next()) {
 				//instanciando classe chamado dto
@@ -66,6 +68,7 @@ public class ChamadoDAO {
 				objChamadoDTO.setTitulo(rs.getString("titulo_chamado"));
 				objChamadoDTO.setCategoria(rs.getString("categoria_chamado"));
 				objChamadoDTO.setDescricao(rs.getString("descricao"));
+				objChamadoDTO.setId_usuario(rs.getInt("id_usuario"));
 				
 				//ao final do bloco adiciono os valores do objeto para uma lista com todos os chamados
 				lista_chamado.add(objChamadoDTO);
@@ -122,6 +125,7 @@ public class ChamadoDAO {
 	        chamado.setTitulo(rs.getString("titulo_chamado"));
 	        chamado.setCategoria(rs.getString("categoria_chamado"));
 	        chamado.setDescricao(rs.getString("descricao"));
+	        chamado.setId_usuario(rs.getInt("id_usuario"));
 	    }
 
 	    rs.close();

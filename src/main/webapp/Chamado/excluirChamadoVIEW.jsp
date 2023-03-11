@@ -1,10 +1,23 @@
+<%@page import="br.com.DTO.UsuarioDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="br.com.DAO.ChamadoDAO"%>
 <%@page import="br.com.DTO.ChamadoDTO"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-
-
+<%
+//verificando se usuario esta logado
+	session = request.getSession(false); //Obtém a sessão atual, mas não cria uma nova se ela não existir
+	if(session == null || session.getAttribute("usuarioLogado") == null) {
+		response.sendRedirect("../index.jsp?denied");
+	} 
+	//verificando se usuario é administrador para acessar pagina restrita
+	UsuarioDTO usuarioLogado = (UsuarioDTO) session.getAttribute("usuarioLogado");
+	String funcao = usuarioLogado.getFuncao();
+	if(!funcao.equals("Administrador")){
+		response.sendRedirect("../home.jsp?denied");
+	}
+		
+%>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -14,13 +27,6 @@
     
     <link rel="stylesheet" type="text/css" href="../style/estilo.css">
 
-    <style>
-      .card-consultar-chamado {
-        padding: 30px 0 0 0;
-        width: 100%;
-        margin: 0 auto;
-      }
-    </style>
   </head>
 
   <body>
@@ -48,42 +54,67 @@
             
             chamadoDTO = chamadoDAO.buscarChamadoPorId(Integer.parseInt(idChamado));
             %>
-            
-            <div class="row"><!--inicio linha-->
-
-              <div class="col-md-12 card-body"><!--coluna 1 - chamado-->
-                <div class="card mb-3 bg-light">
-                  <div class="card-body">
-                    <h5 class="card-title" name="id"><%=chamadoDTO.getTitulo() %></h5>
-  
-                    <h6 class="card-subtitle mb-2 text-muted"><%=chamadoDTO.getCategoria() %></h6>
-                    <p class="card-text"><%=chamadoDTO.getDescricao() %></p>
-  
-                  </div>
-                </div>
-            </div>
+            <form action="excluirChamado.jsp" method="GET">
             
             
-
-               </div><!--fim linha-->
-
-         
-        
+	            <div class="row"><!--inicio linha-->
+	
+	              <div class="col-md-12 card-body"><!--coluna 1 - chamado-->
+	                <div class="card mb-3 bg-light">
+	                
+	                  <div class="card-body">
+	                  
+	                  <div class="form-group">
+	                  <label class="font-weight-bold">ID Chamado</label>
+                      <input type="text" readonly class="form-control-plaintext" name="id_chamado" value="<%=chamadoDTO.getId_chamado() %>">
+                   	 </div>
+          
+	                  
+	                  <div class="form-group">
+	                  	<label class="font-weight-bold">Titulo</label>
+	                  	<input type="text" readonly class="form-control-plaintext" name="titulo" value="<%=chamadoDTO.getTitulo() %>">
+	                  </div>
+	                    
+	                  <div class="form-group">
+	                  <label class="font-weight-bold">Categoria</label>
+	                  	  <input type="text" readonly class="form-control-plaintext" name="categoia" value="<%=chamadoDTO.getCategoria() %>">
+	                  </div>
+	  
+	                  <div class="form-group">
+	                  	<label class="font-weight-bold">Descricao</label>
+	                 		<input type="text" readonly class="form-control-plaintext" name="descricao" value="<%=chamadoDTO.getDescricao() %>">
+	                  </div>
+	                  
+	                  <div class="form-group">
+	                  	<label class="font-weight-bold">ID Usuario</label>
+	                 		<input type="text" readonly class="form-control-plaintext" name="id_usuario" value="<%=chamadoDTO.getId_usuario() %>">
+	                  </div>
+	  	
+	                 </div>
+	                </div>
+            		</div>
+            	</div><!--fim linha-->
+            
+            
            
 
               <div class="row mt-5">
+              
                 <div class="col-6">
-	                <a href="listarChamado.jsp">
-	               		<button class="btn btn-lg btn-warning btn-block" type="submit">Voltar</button>                	
-	                </a>
+                <a href="listarChamadoVIEW.jsp">
+                	<button class="btn btn-lg btn-warning btn-block" type="button">Voltar</button>
+                </a>
+	               		                		                
                 </div>
                 
                 <div class="col-6">
-	                <a href="excluirChamado.jsp?id=<%=chamadoDTO.getId_chamado()%>">
-	               		<button class="btn btn-lg btn-danger btn-block" type="submit">Confirmar exclusão</button>                	
-	                </a>
+	               	<button class="btn btn-lg btn-danger btn-block" type="submit">Confirmar exclusão</button>                	  
                 </div>
-              </div>
+                
+                </div>
+                
+                </form>
+                
               
             </div>
           </div>
