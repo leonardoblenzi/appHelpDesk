@@ -1,7 +1,9 @@
+<%@page import="br.com.DAO.UsuarioDAO"%>
 <%@page import="br.com.DTO.UsuarioDTO"%>
 <%@page import="br.com.DTO.ChamadoDTO"%>
-<%@page import="java.util.ArrayList"%>
 <%@page import="br.com.DAO.ChamadoDAO"%>
+<%@page import="java.util.ArrayList"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%
@@ -35,6 +37,9 @@
 	        <img src="../style/imagens/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
 	        App Help Desk
 	      </a>
+	      <form class="form-inline" action="Usuario/logoutUsuario.jsp">
+			<button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Deslogar</button>
+		</form>
 	    </nav>
 
 	    <div class="container">    
@@ -50,7 +55,7 @@
 	    <%
 		
 			try{
-			
+				UsuarioDAO usuarioDAO = new UsuarioDAO();
 				
 				ChamadoDAO objChamadoDAO = new ChamadoDAO();
 				//lista de chamadoDTO recebe metodo de pesquisar que retorna a lista de chamados
@@ -60,6 +65,9 @@
 		
 				
 				 for(int posicao=0; posicao<lista.size(); posicao++){
+					int idUsuario = lista.get(posicao).getId_usuario();
+					UsuarioDTO usuario = usuarioDAO.buscarUsuarioId(idUsuario);
+					
 					chamadosHTML.append("<div class=row>");
 					chamadosHTML.append("<div class='card-body'>");
 			     	chamadosHTML.append("<div class='card mb-3 bg-light'>");
@@ -70,8 +78,14 @@
 			        chamadosHTML.append("<p>" + lista.get(posicao).getCategoria() + "</p>");
 			        chamadosHTML.append("<label class=font-weight-bold>Descricao</label>");
 			        chamadosHTML.append("<p>" + lista.get(posicao).getDescricao() + "</p>");
-			        chamadosHTML.append("<label class=font-weight-bold>ID Usuario</label>");
-			        chamadosHTML.append("<p>" + lista.get(posicao).getId_usuario() + "</p>");
+			        //dados do usuario
+			        chamadosHTML.append("<label class=font-weight-bold>ID Usuario: </label>");
+					chamadosHTML.append(lista.get(posicao).getId_usuario() + " ");
+					chamadosHTML.append("<label class=font-weight-bold> Nome: </label>");
+					chamadosHTML.append(usuario.getNome() + " ");
+					chamadosHTML.append("<label class=font-weight-bold> Email: </label>");
+					chamadosHTML.append(usuario.getEmail() + " ");
+			        
 			        chamadosHTML.append("</div>");
 			        chamadosHTML.append("</div>");
 			        chamadosHTML.append("</div>");
@@ -107,7 +121,7 @@
 	          </div>
 	        </div>
 	      </div>
-	    </div>
+	   
 
 	
 	

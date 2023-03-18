@@ -31,6 +31,9 @@
         <img src="../style/imagens/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         App Help Desk
       </a>
+      <form class="form-inline" action="Usuario/logoutUsuario.jsp">
+			<button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Deslogar</button>
+		</form>
     </nav>
 
     <div class="container">    

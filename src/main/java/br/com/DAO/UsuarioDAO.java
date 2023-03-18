@@ -4,20 +4,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 
 import br.com.DAO.ConexaoDAO;
+import br.com.DTO.ChamadoDTO;
 import br.com.DTO.UsuarioDTO;
 import jakarta.security.auth.message.callback.PrivateKeyCallback.Request;
 import jakarta.servlet.http.HttpSession;
 
 public class UsuarioDAO {
-	//conexao
+		//conexao
 		Connection con;
 		//preparo de conexao
 		PreparedStatement pstm;
 		//variavel que armazena os valores do banco
 		ResultSet rs;
+		
+		//lista que armazena todos usuarios
+		ArrayList<UsuarioDTO> lista_usuario = new ArrayList<>();
+
 		
 		public Boolean login(UsuarioDTO usuarioDTO, HttpSession session) throws SQLException {
 			String sql = "select * from usuario where email = ? and senha = ?";
@@ -56,6 +61,28 @@ public class UsuarioDAO {
 			
 			return false;
 			
+		}
+		
+		public UsuarioDTO buscarUsuarioId(int id) throws SQLException {
+			con = new ConexaoDAO().conexaoBD();
+			
+		    String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+		    pstm = con.prepareStatement(sql);
+		    pstm.setInt(1, id);
+		    rs = pstm.executeQuery();
+
+		    UsuarioDTO usuario = null;
+		    if (rs.next()) {
+		        usuario = new UsuarioDTO();
+		        usuario.setFuncao(rs.getString("funcao"));
+		        usuario.setNome(rs.getString("nome"));
+		        usuario.setEmail(rs.getString("email"));
+		        usuario.setId(rs.getInt("id_usuario"));
+		    }
+
+		    rs.close();
+		    pstm.close();
+		    return usuario;
 		}
 		
 		

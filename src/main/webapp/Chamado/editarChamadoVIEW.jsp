@@ -2,15 +2,17 @@
 <%@page import="br.com.DAO.ChamadoDAO"%>
 <%@page import="br.com.DTO.ChamadoDTO"%>
 <%
+//verificando se usuario esta logado
 	session = request.getSession(false); //Obtém a sessão atual, mas não cria uma nova se ela não existir
 	if(session == null || session.getAttribute("usuarioLogado") == null) {
-		response.sendRedirect("index.jsp?denied");
+		response.sendRedirect("../index.jsp?denied");
 	} 
 	//verificando se usuario é administrador para acessar pagina restrita
-		UsuarioDTO usuarioLogado = (UsuarioDTO) session.getAttribute("usuarioLogado");
-		if(usuarioLogado.getFuncao() != "Administrador"){
-			response.sendRedirect("../home.jsp?denied");
-		}
+	UsuarioDTO usuarioLogado = (UsuarioDTO) session.getAttribute("usuarioLogado");
+	String funcao = usuarioLogado.getFuncao();
+	if(!funcao.equals("Administrador")){
+		response.sendRedirect("../home.jsp?denied");
+	}
 		
 %>
 <!DOCTYPE html>
@@ -32,6 +34,9 @@
         <img src="../style/imagens/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         App Help Desk
       </a>
+      <form class="form-inline" action="Usuario/logoutUsuario.jsp">
+			<button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Deslogar</button>
+		</form>
     </nav>
 
     <div class="container">    

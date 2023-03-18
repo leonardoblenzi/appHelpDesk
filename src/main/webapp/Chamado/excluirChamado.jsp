@@ -18,10 +18,13 @@
 				//instanciando objeto DTO
 				ChamadoDTO objChamadoDTO = new ChamadoDTO(); 
 						
-				//convertendo id obtido do get para int e setando para o objetoDTO
-				objChamadoDTO.setId_chamado(Integer.parseInt(request.getParameter("id")));
+				//convertendo id obtido do get para int e setando para o objetoDTOinIndesbj
+				int id_chamado = Integer.parseInt(request.getParameter("id_chamado"));
+				objChamadoDTO.setId_chamado(id_chamado);
+				
 				//instanciando objeto DAO
 				ChamadoDAO objChamadoDAO = new ChamadoDAO();
+				
 				//chamando metodo de excluir chamado por id e passando o objeto DTO como parametro
 				objChamadoDAO.excluirChamado(objChamadoDTO);
 				
